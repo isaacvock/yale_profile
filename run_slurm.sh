@@ -14,4 +14,4 @@ conda activate deploy_snakemake
 
 conda config --set channel_priority strict
 
-snakemake --profile simple/ --rerun-triggers mtime
+snakemake --profile yale_profile/ --rerun-triggers mtime
