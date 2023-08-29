@@ -15,12 +15,10 @@ default-resources:
   - time="4:00:00"
 restart-times: 0
 max-jobs-per-second: 0.055
-local-cores: 4
 latency-wait: 60
 jobs: 200
 keep-going: True
 rerun-incomplete: True
 printshellcmds: True
-scheduler: greedy
 use-conda: True
 cluster-status: status-sacct-robust.sh
