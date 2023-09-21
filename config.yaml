@@ -15,6 +15,7 @@ default-resources:
   - time="4:00:00"
 restart-times: 0
 max-jobs-per-second: 0.055
+max-status-checks-per-second: 0.055
 latency-wait: 60
 jobs: 200
 keep-going: True
