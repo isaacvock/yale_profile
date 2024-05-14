@@ -8,7 +8,7 @@
 
 module purge
 
-module load miniconda
+module load miniconda/23.5.2
 
 conda activate deploy_snakemake
 
