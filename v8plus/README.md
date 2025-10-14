@@ -1,7 +1,3 @@
-# Profiles and slurm scripts for Snakemake and nf-core pipelines
-This repo includes the files necessary to configure Snakemake and Nextflow to make effective use of Yale HPC resources when running relevant pipelines. The files in this repo are:
+# Snakemake v8+ profile
 
-1. config.yaml: Snakemake profile configuration file. Currently only compatible with Snakemake < 8.0.0.
-2. nextflow.config: Nextflow config file.
-3. run_slurm.sh: Shell script to launch a Snakemake pipeline. A simple, single-core job is batched, from which `snakemake` is called. The config.yaml profile will ensure that all rules are run as separately batched slurm jobs.
-4. status-sacct-robust.sh: From [this repo](https://github.com/jdblischak/smk-simple-slurm/tree/v7); used by Snakemake to check status of running jobs.
+If using Snakemake version 8+, the existing yale_profile will not work, as Snakemake radically overhauled how jobs get submitted to clusters in this version. Luckily, the shining star [simple slurm repo](https://github.com/jdblischak/smk-simple-slurm/tree/main) adapted, and so I was able to provide this Snakemake v8+ compatible version of the profile. To run it, all you need to do is have this one yaml file in a separate folder (e.g., `simple`) and run `snakemake --profile path/to/directory` (e.g., `snakemake --profile simple/`).
