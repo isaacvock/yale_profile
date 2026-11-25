@@ -23,3 +23,5 @@ rerun-incomplete: True
 printshellcmds: True
 use-conda: True
 cluster-status: status-sacct-robust.sh
+cluster-cancel: scancel
+

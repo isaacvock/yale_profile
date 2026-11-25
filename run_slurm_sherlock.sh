@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --partition=day
-#SBATCH --job-name=normal
+#SBATCH --partition=normal
+#SBATCH --job-name=fastq2EZbakR
 #SBATCH --cpus-per-task=1
 #SBATCH --time=12:00:00
 #SBATCH --mail-type=ALL
@@ -10,7 +10,9 @@ conda activate deploy_snakemake
 
 conda config --set channel_priority strict
 
-snakemake --profile yale_profile/v8plus/ --rerun-triggers mtime
+export PATH="$PWD/yale_profile/v8plus:$PATH"
+
+snakemake --profile yale_profile/v8plus/ --default-resources 'partition="normal"' --rerun-triggers mtime
 
 ### Example for how to request rule-specific resources
-#snakemake --profile yale_profile/v8plus/ --rerun-triggers mtime --set-resources "call_PAS_pints:time='4:00:00'" "call_PAS_bedtools:time='4:00:00'" "call_PAS_bedtools:mem_mb=180000" "call_PAS_pints:mem_mb=180000" "index:mem_mb=180000" "align:mem_mb=70000" "align:time='3:00:00'" "index:time='4:00:00'"
+# snakemake --profile yale_profile/v8plus/ --default-resources 'partition="normal"' --rerun-triggers mtime --set-resources "call_PAS_pints:time='4:00:00'" "call_PAS_bedtools:time='4:00:00'" "call_PAS_bedtools:mem_mb=180000" "call_PAS_pints:mem_mb=180000" "index:mem_mb=180000" "align:mem_mb=70000" "align:time='3:00:00'" "index:time='4:00:00'"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Check status of Slurm job. More robust because runs `sacct` multiple times if
-# needed
+# Check status of Slurm job. Retries `sacct` with a short delay if slurmdbd
+# has not yet registered a newly submitted job, with an `scontrol` fallback.
 
 jobid="$1"
 
@@ -13,29 +13,39 @@ then
 fi
 
 function get_status(){
-  sacct -j "$1" --format State --noheader | head -n 1 | awk '{print $1}'
+  sacct -X -j "$1" --format State --noheader 2>/dev/null | head -n 1 | awk '{print $1}'
 }
 
+output=""
 for i in {1..5}
 do
-  output=`get_status "$jobid"`
-  if [[ ! -z $output ]]
+  output=$(get_status "$jobid")
+  if [[ -n "$output" ]]
   then
     break
   fi
+  if [[ "$i" -lt 5 ]]
+  then
+    sleep 2
+  fi
 done
 
-if [[ -z $output ]]
+if [[ -z "$output" ]]
+then
+  output=$(scontrol show job "$jobid" 2>/dev/null | awk -F= '/JobState=/{print $2}' | awk '{print $1}' | head -n 1)
+fi
+
+if [[ -z "$output" ]]
 then
   echo sacct failed to return the status for jobid "$jobid" >&2
   echo Maybe you need to use scontrol instead? >&2
   exit 1
 fi
 
-if [[ $output =~ ^(COMPLETED).* ]]
+if [[ "$output" =~ ^(COMPLETED).* ]]
 then
   echo success
-elif [[ $output =~ ^(RUNNING|PENDING|COMPLETING|CONFIGURING|SUSPENDED).* ]]
+elif [[ "$output" =~ ^(RUNNING|PENDING|COMPLETING|CONFIGURING|SUSPENDED|REQUEUED|RESIZING|STAGE_OUT).* ]]
 then
   echo running
 else

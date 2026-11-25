@@ -9,13 +9,16 @@ cluster-generic-submit-cmd:
     --output=logs/{rule}/{rule}-{wildcards}-%j.out
     --time={resources.time}
     --parsable
+cluster-generic-status-cmd: status-sacct-robust.sh
+cluster-generic-cancel-cmd: scancel
 default-resources:
-  - partition=normal
+  - partition="day"
   - mem_mb=70000
-  - time="3:00:00"
+  - disk_mb=70000
+  - time="4:00:00"
 restart-times: 0
 max-jobs-per-timespan: 24/1m
-max-status-checks-per-second: 1
+max-status-checks-per-second: 0.055
 local-cores: 1
 cores: 20
 latency-wait: 60
